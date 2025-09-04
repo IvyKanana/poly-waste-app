@@ -1,182 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Poly Waste App — H.M. Clause</title>
-  <link rel="manifest" href="manifest.webmanifest" />
-  <meta name="theme-color" content="#0b7a57" />
-  <link rel="icon" href="assets/icon-192.png" />
-  <link rel="apple-touch-icon" href="assets/icon-192.png" />
-  <style>
-    :root { --brand:#0b7a57; --bg:#f6f7f9; --card:#fff; --muted:#666; --radius:16px; }
-    * { box-sizing: border-box; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
-    body { margin: 0; background: var(--bg); color:#1a1a1a; }
-    header { position: sticky; top:0; z-index:10; background: var(--brand); color:#fff; padding: 12px 16px; display:flex; align-items:center; justify-content:space-between; }
-    h1 { margin:0; font-size: 20px; }
-    .btn { border:0; border-radius: 12px; padding: 10px 14px; cursor:pointer; font-weight:600; }
-    .btn-outline { background:#fff2; color:#fff; border:1px solid #fff5; }
-    .btn-primary { background:#1ea672; color:#fff; }
-    main { padding: 16px; max-width: 880px; margin: 0 auto; }
-    .card { background: var(--card); border-radius: var(--radius); padding: 16px; margin-bottom: 16px; box-shadow: 0 4px 14px rgba(0,0,0,0.06); }
-    .row { display:grid; grid-template-columns:1fr; gap:12px; }
-    @media(min-width:720px){ .row-2{ grid-template-columns: 1fr 1fr; } .row-3{ grid-template-columns: 1fr 1fr 1fr; } }
-    label { font-size: 14px; color: var(--muted); display:block; margin-bottom:6px; }
-    input, select, textarea { width: 100%; padding: 12px; border:1px solid #e2e5ea; border-radius: 12px; background:#fff; font-size: 16px; }
-    input[readonly] { background:#f2f3f5; color:#333; }
-    .muted { color: var(--muted); font-size: 13px; }
-    .preview { line-height:1.6; }
-    .divider { height:1px; background:#e8eaee; margin: 12px 0; }
-    .letterhead { text-align:center; border-bottom:2px solid #0b7a57; padding-bottom:10px; margin-bottom:12px; }
-    .letterhead .title { font-size:22px; font-weight:800; letter-spacing: .4px; }
-    .letterhead .sub { font-size:13px; color:#4b5563; }
-    .checkbox { display:flex; align-items:center; gap:8px; }
-    .success { background:#e8fff2; border:1px solid #b6f0cf; padding:10px 12px; border-radius:10px; color:#114d35; }
-    .error { background:#ffeeee; border:1px solid #ffcccc; padding:10px 12px; border-radius:10px; color:#7a1a1a; }
-    .footer { text-align:center; color:#6b7280; font-size:12px; padding:24px 0; }
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
-      if (window.emailjs) { emailjs.init({publicKey: 'YOUR_EMAILJS_PUBLIC_KEY'}); }
-    });
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PolyWastePWA</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
 </head>
 <body>
-  <header>
-    <h1>Poly Waste App — H.M. Clause</h1>
-    <div style="display:flex; gap:8px">
-      <button id="installBtn" class="btn btn-outline">Install</button>
-      <button id="generateBtn" class="btn btn-primary">Generate PDF & Send</button>
-    </div>
-  </header>
+    <header>
+        <img src="assets/logo.png" alt="Polypac Logo" class="logo">
+        <h1>POLYPAC TRADERS LTD</h1>
+        <h2>Waste Collection Form</h2>
+    </header>
 
-  <main>
-    <form id="wasteForm" class="card">
-      <div class="letterhead">
-        <img src="assets/icon-192.png" alt="logo" width="40" height="40" style="vertical-align:middle; border-radius:8px;"/>
-        <div class="title">POLYPAC TRADERS LTD</div>
-        <div class="sub">Nanyuki, Polypac BSF & Waste Facility</div>
-      </div>
+    <main>
+        <form id="wasteForm">
+            <div class="form-group">
+                <label>Company Name</label>
+                <input type="text" id="company" value="H.M. CLAUSE" readonly>
+            </div>
 
-      <h2>Client Details</h2>
-      <div class="row row-2">
-        <div>
-          <label>Company</label>
-          <input type="text" id="company" value="H.M. CLAUSE" readonly />
-        </div>
-        <div>
-          <label>Telephone</label>
-          <input type="tel" id="telephone" value="0711325493"/>
-        </div>
-        <div>
-          <label>Date</label>
-          <input type="date" id="date"/>
-        </div>
-        <div>
-          <label>Company Representative (Name)</label>
-          <input type="text" id="repName" placeholder="Steve"/>
-        </div>
-        <div>
-          <label>Company Representative (Signature)</label>
-          <input type="text" id="repSign" placeholder="Signature"/>
-        </div>
-        <div>
-          <label>Location</label>
-          <input type="text" id="location" value="Nanyuki, Turaco Farms" readonly/>
-        </div>
-        <div>
-          <label>Address</label>
-          <input type="text" id="address" value="854-1040" readonly/>
-        </div>
-        <div>
-          <label>Client Email (recipient)</label>
-          <input type="email" id="clientEmail" placeholder="client@example.com" required/>
-        </div>
-      </div>
+            <div class="form-group">
+                <label>Location</label>
+                <input type="text" id="location" value="Nanyuki, Turaco Farms" readonly>
+            </div>
 
-      <div class="divider"></div>
-      <h2>Waste Details</h2>
-      <div class="row row-2">
-        <div>
-          <label>Category</label>
-          <select id="category">
-            <option>Extraction</option>
-            <option>Greenhouse removal</option>
-            <option>Waste shed cleaning</option>
-            <option>Pruning rounds</option>
-            <option>Assorted waste</option>
-          </select>
-        </div>
-        <div>
-          <label>Waste Type</label>
-          <select id="wasteType">
-            <option>Tomato pulp</option>
-            <option>Green-organic waste</option>
-            <option>Paper towel & latex gloves</option>
-            <option>Greenhouse polythene</option>
-            <option>Plastics</option>
-            <option>Scrap metal</option>
-          </select>
-        </div>
-        <div>
-          <label>Packing Type</label>
-          <select id="packType">
-            <option>Waste bins</option>
-            <option>Polythene bags</option>
-            <option>Reusable waste bags</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div>
-          <label>Trips Collected (x 2500kg)</label>
-          <input type="number" id="trips" min="0" value="1"/>
-        </div>
-        <div>
-          <label>Quantity (kg)</label>
-          <input type="number" id="quantity" value="2500" readonly/>
-        </div>
-        <div>
-          <label>Notes (optional)</label>
-          <textarea id="notes" placeholder="Any special handling or remarks"></textarea>
-        </div>
-      </div>
+            <div class="form-group">
+                <label>Address</label>
+                <input type="text" id="address" value="854-1040" readonly>
+            </div>
 
-      <div class="divider"></div>
+            <div class="form-group">
+                <label>Waste Category</label>
+                <select id="wasteCategory" required>
+                    <option value="">-- Select Category --</option>
+                    <option value="Extraction">Extraction</option>
+                    <option value="Pruning Rounds">Pruning Rounds</option>
+                    <option value="Greenhouse Removal">Greenhouse Removal</option>
+                    <option value="Waste Shed Cleaning">Waste Shed Cleaning</option>
+                    <option value="Assorted Waste">Assorted Waste</option>
+                </select>
+            </div>
 
-      <div class="checkbox">
-        <input type="checkbox" id="tnc" />
-        <label for="tnc">I agree to the terms and conditions.</label>
-      </div>
+            <div class="form-group">
+                <label>Number of Trips</label>
+                <input type="number" id="trips" min="1" required>
+            </div>
 
-      <div id="status" style="margin-top:10px;"></div>
-    </form>
+            <div class="form-group">
+                <label>Total Quantity (kg)</label>
+                <input type="text" id="quantity" readonly>
+            </div>
 
-    <div class="card" id="printArea">
-      <div class="letterhead">
-        <img src="assets/icon-192.png" alt="logo" width="48" height="48" style="vertical-align:middle; border-radius:8px;"/>
-        <div class="title">POLYPAC TRADERS LTD</div>
-        <div class="sub">Waste Collection Form — H.M. Clause</div>
-      </div>
-      <div class="preview" id="preview"></div>
-      <div class="divider"></div>
-      <div class="preview">
-        <strong>FOR POLYPAC TRADERS LTD (Auto-generated)</strong><br/>
-        <b>Vehicle Reg No.:</b> KBJ 030H<br/>
-        <b>Driver:</b> Stephen<br/>
-        <b>Polypac Staff:</b> Stephen<br/>
-        <b>Designation:</b> Nanyuki, Polypac BSF & Waste Facility<br/>
-        <b>Signature:</b> STEPHEN
-      </div>
-      <div class="divider"></div>
-      <div class="muted">Terms & Conditions apply. Certificate of disposal on request.</div>
-    </div>
+            <div class="form-group">
+                <label>Client Email (Optional)</label>
+                <input type="email" id="clientEmail" placeholder="Enter client email">
+            </div>
 
-    <div class="footer">© 2025 Polypac Traders Ltd — Poly Waste App (PWA)</div>
-  </main>
+            <div class="form-group checkbox">
+                <input type="checkbox" id="terms" required>
+                <label for="terms">I accept the terms & conditions</label>
+            </div>
 
-  <script src="app.js"></script>
+            <button type="submit" id="generateBtn">Generate PDF & Send</button>
+        </form>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Polypac Traders Ltd. All rights reserved.</p>
+    </footer>
 </body>
 </html>
