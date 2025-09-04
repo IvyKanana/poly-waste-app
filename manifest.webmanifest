@@ -1,10 +1,11 @@
 {
-  "name": "Poly Waste App \u2014 H.M. Clause",
+  "name": "PolyWaste App",
   "short_name": "PolyWaste",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#0b7a57",
+  "theme_color": "#006400",
+  "description": "Polypac Waste Collection App",
   "icons": [
     {
       "src": "assets/icon-192.png",
